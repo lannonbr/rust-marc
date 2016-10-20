@@ -187,19 +187,19 @@ impl<'a> fmt::Display for Record<'a> {
 /// Write Record Extension on io::Write
 pub trait WriteRecordExt: io::Write {
     
-    /// write a record to a io::Write implementor
+    /// Write a record to a io::Write implementor.
     ///
-    /// returns the length of the written record
-    fn write_record(&mut self, record: Record) -> Result<usize>;
+    /// Returns the length of the written record.
+    fn write_record(&mut self, record: Record) -> io::Result<usize>;
 }
 
 impl WriteRecordExt for File {
 
-    /// write a record to a file
-    fn write_record(&mut self, record: Record) -> Result<usize>{
-        self.write_all(record.as_ref());
-        
-        Ok(record.as_ref().len())
+    /// Write a record to a file
+    fn write_record(&mut self, record: Record) -> io::Result<usize> {
+		let rec = record.as_ref();
+
+        self.write_all(rec).map(|_| rec.len())
     }
 }
 
